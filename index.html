@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PyLearn - 파이썬 학습 도구</title>
+  <meta name="description" content="브라우저에서 파이썬 코드를 직접 작성하고 실행하며 배우는 단계별 학습 도구">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- CodeMirror 5 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/dracula.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/edit/closebrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/edit/matchbrackets.min.js"></script>
+
+  <!-- marked.js for Markdown -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Pyodide -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.27.4/full/pyodide.js"></script>
+
+  <!-- Custom -->
+  <link rel="stylesheet" href="style.css?v=2">
+</head>
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <header id="header">
+    <div class="header-left">
+      <button id="sidebar-toggle" class="icon-btn" title="사이드바 토글">☰</button>
+      <div class="logo"><span class="logo-icon">🐍</span> PyLearn</div>
+    </div>
+    <div class="header-center">
+      <div id="progress-section">
+        <div class="progress-track"><div id="progress-bar" class="progress-fill"></div></div>
+        <span id="progress-text">0 / 0 완료</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div id="pyodide-status" class="status-badge loading">
+        <span class="status-dot"></span>
+        <span class="status-text">Python 로딩중...</span>
+      </div>
+      <button id="mode-toggle" class="btn-mode">
+        <span class="mode-icon">👨‍🎓</span>
+        <span class="mode-label">학생 모드</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========== MAIN LAYOUT ========== -->
+  <div id="app-container">
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+      <div class="sidebar-header">
+        <h3>📚 학습 단계</h3>
+      </div>
+      <div id="lesson-list"></div>
+      <div id="teacher-sidebar-actions" class="sidebar-actions hidden">
+        <button id="btn-add-lesson" class="btn-sidebar-action">+ 현재 단원에 단계 추가</button>
+        <button id="btn-add-category" class="btn-sidebar-action" style="margin-bottom: 10px;">+ 새 단원 추가</button>
+        <button id="btn-download-json" class="btn-sidebar-action btn-export">📥 JSON 다운로드</button>
+        <button id="btn-upload-json" class="btn-sidebar-action btn-import">📤 JSON 가져오기</button>
+        <input type="file" id="json-file-input" accept=".json" style="display:none">
+      </div>
+    </aside>
+
+    <!-- INSTRUCTION PANEL -->
+    <section id="instruction-panel">
+      <div id="instruction-header">
+        <h2 id="lesson-title">학습을 시작하세요</h2>
+        <div id="teacher-desc-toolbar" class="hidden">
+          <button id="btn-preview-toggle" class="btn-small">👁 미리보기</button>
+        </div>
+      </div>
+      <div id="instruction-content" class="markdown-body">
+        <p>좌측 사이드바에서 학습 단계를 선택하세요.</p>
+      </div>
+      <!-- Teacher mode: markdown editor -->
+      <div id="instruction-editor-wrap" class="hidden">
+        <textarea id="instruction-editor" placeholder="마크다운으로 학습 설명을 작성하세요..."></textarea>
+      </div>
+    </section>
+
+    <!-- HORIZONTAL RESIZER -->
+    <div id="h-resizer">
+      <div class="h-resizer-handle"></div>
+    </div>
+
+    <!-- WORK PANEL (Editor + Output) -->
+    <section id="work-panel">
+      <!-- CODE EDITOR -->
+      <div id="editor-area">
+        <div id="editor-header">
+          <span class="panel-label">📝 코드 에디터</span>
+          <!-- Teacher mode: title editing -->
+          <input type="text" id="edit-lesson-title" class="hidden" placeholder="단계 제목 입력...">
+          <div class="editor-actions">
+            <button id="btn-reset" class="btn-action" title="초기 코드로 되돌리기">↻ 초기화</button>
+            <button id="btn-run" class="btn-action btn-run" title="코드 실행 (Ctrl+Enter)">▶ 실행</button>
+          </div>
+        </div>
+        <div id="code-editor-container"></div>
+      </div>
+
+      <!-- RESIZER -->
+      <div id="resizer">
+        <div class="resizer-handle"></div>
+      </div>
+
+      <!-- OUTPUT TERMINAL -->
+      <div id="output-area">
+        <div id="output-header">
+          <span class="panel-label">💻 실행 결과</span>
+          <button id="btn-clear-output" class="btn-small" title="출력 지우기">🗑 지우기</button>
+        </div>
+        <pre id="output-terminal"><span class="output-placeholder">코드를 실행하면 결과가 여기에 표시됩니다.</span></pre>
+        <!-- Teacher mode: test cases manager -->
+        <div id="teacher-testcases-wrap" class="hidden">
+          <div class="testcases-header">
+            <span class="field-label">🎯 테스트 케이스 관리</span>
+            <button id="btn-add-testcase" class="btn-small">➕ 추가</button>
+          </div>
+          <div id="tc-editor-container" class="testcase-item">
+            <div>
+              <label>입력 (Input)</label>
+              <textarea id="tc-input" placeholder="입력값..."></textarea>
+            </div>
+            <div>
+              <label>기대 출력 (Expected Output)</label>
+              <textarea id="tc-expected" placeholder="정답 출력..."></textarea>
+            </div>
+          </div>
+          <div id="tc-nav-bar" style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; gap:8px;">
+            <button id="btn-tc-prev" class="btn-small">◀ 이전</button>
+            <span id="tc-indicator" style="font-size:12px; color:var(--text-secondary); font-weight:bold;">1 / 1</span>
+            <button id="btn-tc-next" class="btn-small">다음 ▶</button>
+            <button id="btn-tc-delete" class="btn-small" style="margin-left:auto; color:var(--error); border-color:var(--error); background:rgba(248,81,73,0.1);">🗑 현재 삭제</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VALIDATION BAR -->
+      <div id="validation-bar">
+        <div id="validation-message"></div>
+        <div class="validation-actions">
+          <!-- Teacher save/delete buttons -->
+          <button id="btn-save-lesson" class="btn-primary hidden">💾 현재 단계 저장</button>
+          <!-- Student next button -->
+          <button id="btn-next" class="btn-action btn-next" disabled>다음 단계 →</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========== MODALS ========== -->
+
+  <!-- Custom Prompt Modal -->
+  <div id="prompt-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="prompt-title">입력</h3>
+        <button class="modal-close" data-modal="prompt-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <label id="prompt-message"></label>
+        <input type="text" id="prompt-input" autocomplete="off" />
+      </div>
+      <div class="modal-footer" style="gap: 10px;">
+        <button class="btn-small modal-close" data-modal="prompt-modal">취소</button>
+        <button id="btn-prompt-confirm" class="btn-primary">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Confirm Modal -->
+  <div id="confirm-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="confirm-title">확인</h3>
+        <button class="modal-close" data-modal="confirm-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="confirm-message" style="color:var(--text-primary); font-size:14px; margin: 10px 0;"></div>
+      </div>
+      <div class="modal-footer" style="gap: 10px;">
+        <button class="btn-small modal-close" data-modal="confirm-modal">취소</button>
+        <button id="btn-confirm-yes" class="btn-primary" style="background:var(--error);">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="login-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>🔒 선생님 모드 로그인</h3>
+        <button class="modal-close" data-modal="login-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <label>비밀번호</label>
+        <input type="password" id="login-password" placeholder="비밀번호를 입력하세요" autocomplete="current-password">
+        <p id="login-error" class="error-text hidden">비밀번호가 올바르지 않습니다.</p>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-login" class="btn-primary">로그인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Password Change Modal -->
+  <div id="password-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>🔑 비밀번호 변경</h3>
+        <button class="modal-close" data-modal="password-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <label>현재 비밀번호</label>
+        <input type="password" id="pw-current" placeholder="현재 비밀번호" autocomplete="current-password">
+        <label>새 비밀번호</label>
+        <input type="password" id="pw-new" placeholder="새 비밀번호" autocomplete="new-password">
+        <label>새 비밀번호 확인</label>
+        <input type="password" id="pw-confirm" placeholder="새 비밀번호 확인" autocomplete="new-password">
+        <p id="pw-error" class="error-text hidden"></p>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-change-pw" class="btn-primary">변경</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Teacher Settings Dropdown -->
+  <div id="teacher-menu" class="dropdown-menu hidden">
+    <button id="btn-change-password" class="dropdown-item">🔑 비밀번호 변경</button>
+    <button id="btn-logout" class="dropdown-item">🚪 로그아웃</button>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js?v=2"></script>
+</body>
+</html>
