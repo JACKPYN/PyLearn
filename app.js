@@ -83,7 +83,7 @@
   }
 
   // ===== TERMINAL IO =====
-  window._js_print = function(text) {
+  window._js_print = function (text) {
     const terminal = $('output-terminal');
     if (terminal.querySelector('.output-placeholder')) {
       terminal.innerHTML = '';
@@ -95,7 +95,7 @@
     terminal.scrollTop = terminal.scrollHeight;
   };
 
-  window._js_async_prompt = async function(promptText) {
+  window._js_async_prompt = async function (promptText) {
     return new Promise((resolve) => {
       const terminal = $('output-terminal');
       if (terminal.querySelector('.output-placeholder')) {
@@ -107,7 +107,7 @@
         promptSpan.textContent = promptText;
         terminal.appendChild(promptSpan);
       }
-      
+
       const inputEl = document.createElement('input');
       inputEl.type = 'text';
       inputEl.className = 'terminal-input';
@@ -115,8 +115,8 @@
       terminal.appendChild(inputEl);
       inputEl.focus();
       terminal.scrollTop = terminal.scrollHeight;
-      
-      inputEl.addEventListener('keydown', function(e) {
+
+      inputEl.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') {
           const val = inputEl.value;
           const valSpan = document.createElement('span');
@@ -213,9 +213,9 @@ _is_automated_test = True
 
       state.pyodide.globals.set('_raw_code', code);
       const transformedCode = state.pyodide.runPython('_transform_code(_raw_code)');
-      
+
       await state.pyodide.runPythonAsync(transformedCode);
-      
+
       if (!interactive) {
         const stdout = state.pyodide.runPython('sys.stdout.getvalue()');
         const stderr = state.pyodide.runPython('sys.stderr.getvalue()');
@@ -1012,7 +1012,7 @@ _is_automated_test = True
         loadLesson(state.currentCatIndex + 1, 0);
         toast('다음 단원으로 넘어갑니다! 🚀', 'success');
       } else {
-        toast('🎉 모든 단계를 완료했습니다! 대단해요!', 'success');
+        toast('마지막 단계입니다.', 'success');
       }
     });
 
