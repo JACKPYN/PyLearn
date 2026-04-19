@@ -12,8 +12,8 @@
     CATEGORIES: 'pylearn_categories',
     AUTH: 'pylearn_auth',
   };
-  // SHA-256 hash of 'jack1234@@'
-  const DEFAULT_PW_HASH = '28d1b7626bc9b7ee36b2d3f9e1ed9aa78faa54c0191a8b56d9efa2b63fcae6de';
+  // SHA-256 hash of 'ay1234@@'
+  const DEFAULT_PW_HASH = 'a7a6d5f2dcd960866ca2c7f75a42cb840c2f2656c664e91d430ced485d6e43d5';
 
   // ===== STATE =====
   const state = {
