@@ -82,6 +82,53 @@
     if (confirmResolve) { confirmResolve(val); confirmResolve = null; }
   }
 
+  // ===== TERMINAL IO =====
+  window._js_print = function(text) {
+    const terminal = $('output-terminal');
+    if (terminal.querySelector('.output-placeholder')) {
+      terminal.innerHTML = '';
+    }
+    const span = document.createElement('span');
+    span.className = 'output-text';
+    span.textContent = text;
+    terminal.appendChild(span);
+    terminal.scrollTop = terminal.scrollHeight;
+  };
+
+  window._js_async_prompt = async function(promptText) {
+    return new Promise((resolve) => {
+      const terminal = $('output-terminal');
+      if (terminal.querySelector('.output-placeholder')) {
+        terminal.innerHTML = '';
+      }
+      if (promptText) {
+        const promptSpan = document.createElement('span');
+        promptSpan.className = 'output-text';
+        promptSpan.textContent = promptText;
+        terminal.appendChild(promptSpan);
+      }
+      
+      const inputEl = document.createElement('input');
+      inputEl.type = 'text';
+      inputEl.className = 'terminal-input';
+      inputEl.style.cssText = 'background: transparent; border: none; outline: none; color: inherit; font: inherit; width: 50%; border-bottom: 1px solid #666; margin-left: 2px;';
+      terminal.appendChild(inputEl);
+      inputEl.focus();
+      terminal.scrollTop = terminal.scrollHeight;
+      
+      inputEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          const val = inputEl.value;
+          const valSpan = document.createElement('span');
+          valSpan.className = 'output-text';
+          valSpan.textContent = val + '\n';
+          terminal.replaceChild(valSpan, inputEl);
+          resolve(val);
+        }
+      });
+    });
+  };
+
   // ===== PYODIDE =====
   async function initPyodide() {
     try {
@@ -89,21 +136,39 @@
       state.pyodide.runPython(`
 import sys, io
 import builtins
-from js import prompt as _js_prompt
+import ast
+from js import _js_async_prompt
 
 _is_automated_test = False
 _automated_inputs = []
 
-def _custom_input(p=""):
+async def _custom_async_input(p=""):
     global _automated_inputs, _is_automated_test
     if _is_automated_test:
         if len(_automated_inputs) > 0:
             return str(_automated_inputs.pop(0))
         return ""
-    r = _js_prompt(str(p))
+    r = await _js_async_prompt(str(p))
     return r if r is not None else ""
 
-builtins.input = _custom_input
+builtins.input = _custom_async_input
+
+class InputToAwait(ast.NodeTransformer):
+    def visit_Call(self, node):
+        self.generic_visit(node)
+        if isinstance(node.func, ast.Name) and node.func.id == 'input':
+            node.func.id = '_custom_async_input'
+            return ast.Await(value=node)
+        return node
+
+def _transform_code(code):
+    try:
+        tree = ast.parse(code)
+        tree = InputToAwait().visit(tree)
+        ast.fix_missing_locations(tree)
+        return ast.unparse(tree)
+    except Exception as e:
+        return code
 `);
       state.pyodideReady = true;
       const badge = $('pyodide-status');
@@ -120,21 +185,44 @@ builtins.input = _custom_input
 
   async function runPython(code, testInput = null) {
     if (!state.pyodideReady) return { output: '', error: 'Python이 아직 로딩 중입니다...' };
+    const interactive = (testInput === null);
     try {
-      state.pyodide.runPython('sys.stdout = io.StringIO()\nsys.stderr = io.StringIO()');
-
-      if (testInput !== null) {
-        state.pyodide.runPython('_is_automated_test = True');
+      if (interactive) {
+        state.pyodide.runPython(`
+import sys
+from js import _js_print
+class CustomStdout:
+    def write(self, text):
+        _js_print(text)
+    def flush(self): pass
+sys.stdout = CustomStdout()
+sys.stderr = CustomStdout()
+_is_automated_test = False
+_automated_inputs = []
+        `);
+      } else {
+        state.pyodide.runPython(`
+import sys, io
+sys.stdout = io.StringIO()
+sys.stderr = io.StringIO()
+_is_automated_test = True
+        `);
         const arr = testInput ? testInput.split('\n') : [];
         state.pyodide.globals.set('_automated_inputs', state.pyodide.toPy(arr));
-      } else {
-        state.pyodide.runPython('_is_automated_test = False\n_automated_inputs = []');
       }
 
-      state.pyodide.runPython(code);
-      const stdout = state.pyodide.runPython('sys.stdout.getvalue()');
-      const stderr = state.pyodide.runPython('sys.stderr.getvalue()');
-      return { output: stdout, error: stderr || '' };
+      state.pyodide.globals.set('_raw_code', code);
+      const transformedCode = state.pyodide.runPython('_transform_code(_raw_code)');
+      
+      await state.pyodide.runPythonAsync(transformedCode);
+      
+      if (!interactive) {
+        const stdout = state.pyodide.runPython('sys.stdout.getvalue()');
+        const stderr = state.pyodide.runPython('sys.stderr.getvalue()');
+        return { output: stdout, error: stderr || '' };
+      } else {
+        return { output: '', error: '' };
+      }
     } catch (e) {
       let msg = typeof e === 'string' ? e : (e.message || String(e));
       const lines = msg.split('\n').filter(l => l.trim());
@@ -352,7 +440,7 @@ builtins.input = _custom_input
     }
 
     const terminal = $('output-terminal');
-    terminal.innerHTML = '<span class="output-placeholder">⏳ 실행 중...</span>';
+    terminal.innerHTML = '';
     $('btn-run').disabled = true;
 
     await new Promise(r => setTimeout(r, 50));
@@ -360,12 +448,9 @@ builtins.input = _custom_input
     $('btn-run').disabled = false;
 
     if (result.error) {
-      terminal.innerHTML = `<span class="output-error">${escapeHtml(result.error)}</span>`;
-      if (result.output) {
-        terminal.innerHTML = `<span>${escapeHtml(result.output)}</span><span class="output-error">${escapeHtml(result.error)}</span>`;
-      }
-    } else {
-      terminal.innerHTML = result.output ? escapeHtml(result.output) : '<span class="output-placeholder">(출력 없음)</span>';
+      terminal.innerHTML += `\n<span class="output-error">${escapeHtml(result.error)}</span>`;
+    } else if (terminal.innerHTML === '') {
+      terminal.innerHTML = '<span class="output-placeholder">(출력 없음)</span>';
     }
 
     if (state.mode === 'student') await validateOutput(code, result.output);
