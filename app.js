@@ -136,10 +136,14 @@ builtins.input = _custom_input
       const stderr = state.pyodide.runPython('sys.stderr.getvalue()');
       return { output: stdout, error: stderr || '' };
     } catch (e) {
-      let msg = e.message || String(e);
+      let msg = typeof e === 'string' ? e : (e.message || String(e));
       const lines = msg.split('\n').filter(l => l.trim());
-      msg = lines.length > 0 ? lines[lines.length - 1] : msg;
-      return { output: '', error: msg };
+      let finalMsg = lines.length > 0 ? lines[lines.length - 1] : msg;
+
+      if (finalMsg.trim() === 'PythonError' || finalMsg.trim() === '') {
+        finalMsg = msg; // Fallback to full message if parsing failed
+      }
+      return { output: '', error: finalMsg };
     }
   }
 
@@ -399,7 +403,7 @@ builtins.input = _custom_input
       const res = await runPython(code, tc.input || "");
 
       if (res.error) {
-        msgEl.textContent = `❌ 테스트 케이스 ${i + 1} 에러: ${res.error}`;
+        msgEl.textContent = '미션 실패!! 다시 시도해주세요.';
         msgEl.className = 'validation-fail';
         return; // Stop on first error
       }
@@ -408,14 +412,14 @@ builtins.input = _custom_input
       const expected = (tc.expectedOutput || '').trim();
 
       if (actual !== expected) {
-        msgEl.textContent = `❌ 테스트 케이스 ${i + 1} 실패 (입력: ${tc.input ? tc.input.replace(/\n/g, ', ') : '없음'}, 예상: ${expected}, 실제: ${actual})`;
+        msgEl.textContent = '미션 실패!! 다시 시도해주세요.';
         msgEl.className = 'validation-fail';
         return; // Stop on first fail
       }
     }
 
     // All test cases passed!
-    msgEl.textContent = '🎉 모든 테스트 케이스를 통과했습니다!';
+    msgEl.textContent = '🎉 미션 성공!! 다음 단계로 넘어가세요.';
     msgEl.className = 'validation-success';
     $('btn-next').disabled = false;
 
