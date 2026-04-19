@@ -9,7 +9,12 @@
           "title": "1. 첫 번째 파이썬 프로그램",
           "description": "## 🎉 파이썬의 세계에 오신 것을 환영합니다!\n\n파이썬에서 화면에 글자를 보여주려면 `print()` 함수를 사용합니다.\n\n### 사용법\n```python\nprint(\"안녕, 파이썬!\")\n```\n\n> 💡 **팁**: 문자열은 큰따옴표(`\"`) 또는 작은따옴표(`'`)로 감싸야 합니다.\n\n---\n\n### ✏️ 미션\n화면에 `Hello, World!`를 출력해보세요.",
           "initialCode": "# 아래에 코드를 작성하세요\n",
-          "expectedOutput": "Hello, World!"
+          "testCases": [
+            {
+              "input": "",
+              "expectedOutput": "Hello, World!"
+            }
+          ]
         },
         {
           "id": "c1_l2",
@@ -70,9 +75,14 @@
         {
           "id": "c1_l10",
           "title": "10. 데이터 입력받기 (input)",
-          "description": "## ⌨️ 사용자 입력 (`input()`)\n\n사용자에게 값을 입력받을 때는 `input()`을 사용합니다.\n\n```python\nname = input(\"이름을 입력하세요: \")\nprint(name)\n```\n*(PyLearn 환경에서는 `input()` 실행 시 브라우저 팝업이 뜹니다.)*\n\n---\n\n### ✏️ 미션\n`input()`으로 문자열을 입력받아 변수 `word`에 저장한 뒤, 그대로 출력하세요. (팝업창에 `PyLearn`이라고 입력해보세요.)",
+          "description": "## ⌨️ 사용자 입력 (`input()`)\n\n사용자에게 값을 입력받을 때는 `input()`을 사용합니다.\n\n```python\nname = input(\"이름을 입력하세요: \")\nprint(name)\n```\n*(이제 실행 결과 창 안에서 직접 입력할 수 있습니다!)*\n\n---\n\n### ✏️ 미션\n`input()`으로 문자열을 입력받아 변수 `word`에 저장한 뒤, 그대로 출력하세요. (터미널에 `PyLearn`이라고 입력해보세요.)",
           "initialCode": "# 입력을 받아 출력하세요\n",
-          "expectedOutput": "PyLearn"
+          "testCases": [
+            {
+              "input": "PyLearn",
+              "expectedOutput": "PyLearn"
+            }
+          ]
         }
       ]
     },

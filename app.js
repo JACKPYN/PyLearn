@@ -9,6 +9,8 @@
   const STORAGE = {
     PASSWORD: 'pylearn_password',
     PROGRESS: 'pylearn_progress',
+    CATEGORIES: 'pylearn_categories',
+    AUTH: 'pylearn_auth',
   };
   // SHA-256 hash of 'jack1234@@'
   const DEFAULT_PW_HASH = '28d1b7626bc9b7ee36b2d3f9e1ed9aa78faa54c0191a8b56d9efa2b63fcae6de';
@@ -258,13 +260,32 @@ _is_automated_test = True
   }
 
   // ===== CONTENT LOADING =====
+  function saveData() {
+    localStorage.setItem(STORAGE.CATEGORIES, JSON.stringify(state.categories));
+  }
+
   async function loadContent() {
     try {
-      // Add timestamp to prevent caching during dev
-      const resp = await fetch('default_content.json?t=' + Date.now());
-      if (!resp.ok) throw new Error('Fetch failed');
-      const data = await resp.json();
-      state.categories = data.categories || [];
+      const localStr = localStorage.getItem(STORAGE.CATEGORIES);
+      if (localStr) {
+        state.categories = JSON.parse(localStr);
+        // Ensure c1_l10 has testCases (hotfix for backward compatibility)
+        const cat1 = state.categories.find(c => c.id === 'c1');
+        if (cat1) {
+          const l10 = cat1.lessons.find(l => l.id === 'c1_l10');
+          if (l10 && !l10.testCases) {
+            l10.testCases = [{ input: "PyLearn", expectedOutput: "PyLearn" }];
+            saveData();
+          }
+        }
+      } else {
+        // Add timestamp to prevent caching during dev
+        const resp = await fetch('default_content.json?t=' + Date.now());
+        if (!resp.ok) throw new Error('Fetch failed');
+        const data = await resp.json();
+        state.categories = data.categories || [];
+        saveData(); // Save initial data to local storage
+      }
     } catch (e) {
       console.error('Failed to load content:', e);
       state.categories = [{
@@ -543,6 +564,7 @@ _is_automated_test = True
   function enterTeacherMode() {
     state.mode = 'teacher';
     state.authenticated = true;
+    sessionStorage.setItem(STORAGE.AUTH, '1');
     const btn = $('mode-toggle');
     btn.classList.add('teacher');
     btn.querySelector('.mode-icon').textContent = '👨‍🏫';
@@ -572,6 +594,8 @@ _is_automated_test = True
 
   function exitTeacherMode() {
     state.mode = 'student';
+    state.authenticated = false;
+    sessionStorage.removeItem(STORAGE.AUTH);
     const btn = $('mode-toggle');
     btn.classList.remove('teacher');
     btn.querySelector('.mode-icon').textContent = '👨‍🎓';
@@ -712,6 +736,7 @@ _is_automated_test = True
     lesson.testCases = JSON.parse(JSON.stringify(state.editingTestCases));
     delete lesson.expectedOutput; // Cleanup old field
 
+    saveData();
     $('lesson-title').textContent = lesson.title;
     renderLessonList();
     toast('💾 저장되었습니다.', 'success');
@@ -732,6 +757,7 @@ _is_automated_test = True
       initialCode: '# 코드를 작성하세요\n',
       testCases: [{ input: '', expectedOutput: '' }]
     });
+    saveData();
     renderLessonList();
     loadLesson(state.currentCatIndex, cat.lessons.length - 1);
     updateProgress();
@@ -748,6 +774,7 @@ _is_automated_test = True
     if (!(await appConfirm(`정말로 "${lesson.title}" 단계를 삭제하시겠습니까?`))) return;
 
     cat.lessons.splice(lIndex, 1);
+    saveData();
 
     if (state.currentCatIndex === cIndex) {
       if (state.currentLesIndex === lIndex) {
@@ -773,6 +800,7 @@ _is_automated_test = True
     if (!newTitle || newTitle.trim() === '' || newTitle === lesson.title) return;
 
     lesson.title = newTitle;
+    saveData();
     if (state.currentCatIndex === cIndex && state.currentLesIndex === lIndex) {
       $('lesson-title').textContent = newTitle;
       if (state.mode === 'teacher') $('edit-lesson-title').value = newTitle;
@@ -797,6 +825,7 @@ _is_automated_test = True
         testCases: [{ input: '', expectedOutput: '' }]
       }]
     });
+    saveData();
 
     renderLessonList();
     loadLesson(state.categories.length - 1, 0);
@@ -812,6 +841,7 @@ _is_automated_test = True
     if (!newTitle || newTitle.trim() === '' || newTitle === cat.title) return;
 
     cat.title = newTitle;
+    saveData();
     renderLessonList();
     toast('단원 이름이 변경되었습니다.', 'success');
   }
@@ -825,6 +855,7 @@ _is_automated_test = True
     if (!(await appConfirm(`정말로 "${cat.title}" 단원과 그 안의 모든 단계를 삭제하시겠습니까?`))) return;
 
     state.categories.splice(cIndex, 1);
+    saveData();
 
     if (state.currentCatIndex === cIndex) {
       state.currentCatIndex = Math.min(cIndex, state.categories.length - 1);
@@ -865,6 +896,7 @@ _is_automated_test = True
         if (!(await appConfirm('기존 데이터를 모두 지우고 이 백업 파일의 내용으로 덮어씌우시겠습니까?'))) return;
 
         state.categories = data.categories;
+        saveData();
         renderLessonList();
         loadLesson(0, 0);
         updateProgress();
@@ -1113,6 +1145,10 @@ _is_automated_test = True
     initEditor();
     bindEvents();
     await loadContent();
+    // Restore teacher session if active (persists across refreshes, clears on tab close)
+    if (sessionStorage.getItem(STORAGE.AUTH) === '1') {
+      enterTeacherMode();
+    }
     initPyodide();
   }
 
