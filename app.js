@@ -122,13 +122,13 @@ builtins.input = _custom_input
     if (!state.pyodideReady) return { output: '', error: 'Python이 아직 로딩 중입니다...' };
     try {
       state.pyodide.runPython('sys.stdout = io.StringIO()\nsys.stderr = io.StringIO()');
-      
+
       if (testInput !== null) {
         state.pyodide.runPython('_is_automated_test = True');
-        const arr = testInput ? testInput.split('\\n') : [];
+        const arr = testInput ? testInput.split('\n') : [];
         state.pyodide.globals.set('_automated_inputs', state.pyodide.toPy(arr));
       } else {
-        state.pyodide.runPython('_is_automated_test = False\\n_automated_inputs = []');
+        state.pyodide.runPython('_is_automated_test = False\n_automated_inputs = []');
       }
 
       state.pyodide.runPython(code);
@@ -137,7 +137,7 @@ builtins.input = _custom_input
       return { output: stdout, error: stderr || '' };
     } catch (e) {
       let msg = e.message || String(e);
-      const lines = msg.split('\\n').filter(l => l.trim());
+      const lines = msg.split('\n').filter(l => l.trim());
       msg = lines.length > 0 ? lines[lines.length - 1] : msg;
       return { output: '', error: msg };
     }
@@ -179,7 +179,7 @@ builtins.input = _custom_input
         id: "error_cat", title: "로딩 에러",
         lessons: [{
           id: "error_les", title: '로딩 실패',
-          description: '## ⚠️ 콘텐츠를 불러올 수 없습니다.\\n\\n`default_content.json` 파일을 확인해 주세요.',
+          description: '## ⚠️ 콘텐츠를 불러올 수 없습니다.\n\n`default_content.json` 파일을 확인해 주세요.',
           initialCode: '# 로딩 실패', expectedOutput: '',
         }]
       }];
@@ -199,13 +199,13 @@ builtins.input = _custom_input
   function renderLessonList() {
     const list = $('lesson-list');
     list.innerHTML = '';
-    
+
     state.categories.forEach((category, cIndex) => {
       // 1. Category Header
       const catHeader = document.createElement('div');
       const isOpen = (cIndex === state.currentCatIndex);
       catHeader.className = 'category-header' + (isOpen ? ' open' : '');
-      
+
       const catTitleWrap = document.createElement('div');
       catTitleWrap.style.cssText = "display:flex; align-items:center; flex:1; min-width:0; overflow:hidden;";
       catTitleWrap.innerHTML = `<span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">📁 ${escapeHtml(category.title)}</span>`;
@@ -214,13 +214,13 @@ builtins.input = _custom_input
       if (state.mode === 'teacher') {
         const actions = document.createElement('div');
         actions.className = 'tc-inline-actions';
-        
+
         const btnRename = document.createElement('button');
         btnRename.className = 'btn-icon';
         btnRename.textContent = '✏️';
         btnRename.title = '이름 변경';
         btnRename.addEventListener('click', (e) => { e.stopPropagation(); renameCategory(cIndex); });
-        
+
         const btnDel = document.createElement('button');
         btnDel.className = 'btn-icon';
         btnDel.textContent = '🗑';
@@ -237,11 +237,11 @@ builtins.input = _custom_input
       toggleWrap.style.marginLeft = '8px';
       toggleWrap.textContent = '▶';
       catHeader.appendChild(toggleWrap);
-      
+
       // 2. Category Lessons Container
       const lessonsContainer = document.createElement('div');
       lessonsContainer.className = 'category-lessons' + (isOpen ? ' open' : '');
-      
+
       catHeader.addEventListener('click', () => {
         catHeader.classList.toggle('open');
         lessonsContainer.classList.toggle('open');
@@ -253,10 +253,10 @@ builtins.input = _custom_input
         const item = document.createElement('div');
         const isActive = (cIndex === state.currentCatIndex && lIndex === state.currentLesIndex);
         item.className = 'lesson-item' + (isActive ? ' active' : '');
-        
+
         const done = state.completed.has(lesson.id);
         if (done) item.classList.add('completed');
-        
+
         const lesTitleWrap = document.createElement('div');
         lesTitleWrap.style.cssText = "display:flex; align-items:center; flex:1; min-width:0; overflow:hidden;";
         lesTitleWrap.innerHTML = `
@@ -268,19 +268,19 @@ builtins.input = _custom_input
         if (state.mode === 'teacher') {
           const actions = document.createElement('div');
           actions.className = 'tc-inline-actions';
-          
+
           const btnRename = document.createElement('button');
           btnRename.className = 'btn-icon';
           btnRename.textContent = '✏️';
           btnRename.title = '이름 변경';
           btnRename.addEventListener('click', (e) => { e.stopPropagation(); renameLesson(cIndex, lIndex); });
-          
+
           const btnDel = document.createElement('button');
           btnDel.className = 'btn-icon';
           btnDel.textContent = '🗑';
           btnDel.title = '단계 삭제';
           btnDel.addEventListener('click', (e) => { e.stopPropagation(); deleteLesson(cIndex, lIndex); });
-          
+
           actions.appendChild(btnRename);
           actions.appendChild(btnDel);
           item.appendChild(actions);
@@ -307,7 +307,7 @@ builtins.input = _custom_input
     if (cIndex < 0 || cIndex >= state.categories.length) return;
     const category = state.categories[cIndex];
     if (lIndex < 0 || lIndex >= category.lessons.length) return;
-    
+
     state.currentCatIndex = cIndex;
     state.currentLesIndex = lIndex;
     const lesson = category.lessons[lIndex];
@@ -386,10 +386,10 @@ builtins.input = _custom_input
     let cases = lesson.testCases;
     if (!cases || cases.length === 0) {
       if (lesson.expectedOutput !== undefined && lesson.expectedOutput !== "") {
-         cases = [{ input: "", expectedOutput: lesson.expectedOutput }];
+        cases = [{ input: "", expectedOutput: lesson.expectedOutput }];
       } else {
-         msgEl.textContent = ''; // No validation required
-         return;
+        msgEl.textContent = ''; // No validation required
+        return;
       }
     }
 
@@ -397,18 +397,18 @@ builtins.input = _custom_input
       const tc = cases[i];
       // Run background automated test
       const res = await runPython(code, tc.input || "");
-      
+
       if (res.error) {
-        msgEl.textContent = `❌ 테스트 케이스 ${i+1} 에러: ${res.error}`;
+        msgEl.textContent = `❌ 테스트 케이스 ${i + 1} 에러: ${res.error}`;
         msgEl.className = 'validation-fail';
         return; // Stop on first error
       }
-      
+
       const actual = (res.output || '').trim();
       const expected = (tc.expectedOutput || '').trim();
-      
+
       if (actual !== expected) {
-        msgEl.textContent = `❌ 테스트 케이스 ${i+1} 실패 (입력: ${tc.input ? tc.input.replace(/\\n/g, ', ') : '없음'}, 예상: ${expected}, 실제: ${actual})`;
+        msgEl.textContent = `❌ 테스트 케이스 ${i + 1} 실패 (입력: ${tc.input ? tc.input.replace(/\n/g, ', ') : '없음'}, 예상: ${expected}, 실제: ${actual})`;
         msgEl.className = 'validation-fail';
         return; // Stop on first fail
       }
@@ -541,9 +541,9 @@ builtins.input = _custom_input
     let cases = lesson.testCases;
     if (!cases || cases.length === 0) {
       if (lesson.expectedOutput !== undefined) {
-         cases = [{ input: '', expectedOutput: lesson.expectedOutput }];
+        cases = [{ input: '', expectedOutput: lesson.expectedOutput }];
       } else {
-         cases = [{ input: '', expectedOutput: '' }];
+        cases = [{ input: '', expectedOutput: '' }];
       }
     }
     // Deep copy to prevent mutating the original until saved
@@ -557,13 +557,13 @@ builtins.input = _custom_input
       state.editingTestCases.push({ input: '', expectedOutput: '' });
       state.currentTcIndex = 0;
     }
-    
+
     const tc = state.editingTestCases[state.currentTcIndex];
     $('tc-input').value = tc.input || '';
     $('tc-expected').value = tc.expectedOutput || '';
-    
+
     $('tc-indicator').textContent = `${state.currentTcIndex + 1} / ${state.editingTestCases.length}`;
-    
+
     $('btn-tc-prev').disabled = (state.currentTcIndex === 0);
     $('btn-tc-next').disabled = (state.currentTcIndex === state.editingTestCases.length - 1);
   }
@@ -617,7 +617,7 @@ builtins.input = _custom_input
     lesson.title = $('edit-lesson-title').value.trim() || '제목 없음';
     lesson.description = $('instruction-editor').value;
     lesson.initialCode = state.editor.getValue();
-    
+
     // Save Test Cases
     updateCurrentTestCaseData();
     lesson.testCases = JSON.parse(JSON.stringify(state.editingTestCases));
@@ -630,17 +630,17 @@ builtins.input = _custom_input
 
   async function addLesson() {
     const cat = state.categories[state.currentCatIndex];
-    if(!cat) return;
-    
+    if (!cat) return;
+
     const newTitle = await appPrompt('새 단계의 이름을 입력하세요:');
     if (!newTitle) return;
-    
+
     const newId = 'l_' + Date.now();
     cat.lessons.push({
       id: newId,
       title: newTitle,
-      description: '## 새 단계\\n\\n설명을 작성하세요.',
-      initialCode: '# 코드를 작성하세요\\n',
+      description: '## 새 단계\n\n설명을 작성하세요.',
+      initialCode: '# 코드를 작성하세요\n',
       testCases: [{ input: '', expectedOutput: '' }]
     });
     renderLessonList();
@@ -659,12 +659,12 @@ builtins.input = _custom_input
     if (!(await appConfirm(`정말로 "${lesson.title}" 단계를 삭제하시겠습니까?`))) return;
 
     cat.lessons.splice(lIndex, 1);
-    
+
     if (state.currentCatIndex === cIndex) {
       if (state.currentLesIndex === lIndex) {
-         state.currentLesIndex = Math.min(lIndex, cat.lessons.length - 1);
+        state.currentLesIndex = Math.min(lIndex, cat.lessons.length - 1);
       } else if (state.currentLesIndex > lIndex) {
-         state.currentLesIndex--;
+        state.currentLesIndex--;
       }
     }
     renderLessonList();
@@ -679,10 +679,10 @@ builtins.input = _custom_input
     const cat = state.categories[cIndex];
     const lesson = cat.lessons[lIndex];
     if (!lesson) return;
-    
+
     const newTitle = await appPrompt('단계의 새 이름을 입력하세요:', lesson.title);
     if (!newTitle || newTitle.trim() === '' || newTitle === lesson.title) return;
-    
+
     lesson.title = newTitle;
     if (state.currentCatIndex === cIndex && state.currentLesIndex === lIndex) {
       $('lesson-title').textContent = newTitle;
@@ -695,7 +695,7 @@ builtins.input = _custom_input
   async function addCategory() {
     const newTitle = await appPrompt('새 단원의 이름을 입력하세요:');
     if (!newTitle) return;
-    
+
     const newId = 'c_' + Date.now();
     state.categories.push({
       id: newId,
@@ -703,12 +703,12 @@ builtins.input = _custom_input
       lessons: [{
         id: 'l_' + Date.now(),
         title: '새 학습 단계',
-        description: '## 새 단계\\n\\n설명을 작성하세요.',
-        initialCode: '# 코드를 작성하세요\\n',
+        description: '## 새 단계\n\n설명을 작성하세요.',
+        initialCode: '# 코드를 작성하세요\n',
         testCases: [{ input: '', expectedOutput: '' }]
       }]
     });
-    
+
     renderLessonList();
     loadLesson(state.categories.length - 1, 0);
     updateProgress();
@@ -718,10 +718,10 @@ builtins.input = _custom_input
   async function renameCategory(cIndex) {
     const cat = state.categories[cIndex];
     if (!cat) return;
-    
+
     const newTitle = await appPrompt('단원의 새 이름을 입력하세요:', cat.title);
     if (!newTitle || newTitle.trim() === '' || newTitle === cat.title) return;
-    
+
     cat.title = newTitle;
     renderLessonList();
     toast('단원 이름이 변경되었습니다.', 'success');
@@ -734,9 +734,9 @@ builtins.input = _custom_input
     }
     const cat = state.categories[cIndex];
     if (!(await appConfirm(`정말로 "${cat.title}" 단원과 그 안의 모든 단계를 삭제하시겠습니까?`))) return;
-    
+
     state.categories.splice(cIndex, 1);
-    
+
     if (state.currentCatIndex === cIndex) {
       state.currentCatIndex = Math.min(cIndex, state.categories.length - 1);
       state.currentLesIndex = 0;
@@ -752,7 +752,7 @@ builtins.input = _custom_input
   function downloadJSON() {
     if (state.mode === 'teacher') saveCurrentLesson();
     const data = JSON.stringify({ categories: state.categories }, null, 2);
-    
+
     // 파일 프로토콜(file://) 등에서 Blob URL의 파일명이 무시되는 현상을 막기 위해 데이터 URI 방식 사용
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(data);
     const a = document.createElement('a');
@@ -762,7 +762,7 @@ builtins.input = _custom_input
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    
+
     toast('📥 JSON 파일이 다운로드 되었습니다.', 'success');
   }
 
@@ -772,7 +772,7 @@ builtins.input = _custom_input
       try {
         const data = JSON.parse(e.target.result);
         if (!data.categories || !Array.isArray(data.categories)) throw new Error('Invalid format');
-        
+
         if (!(await appConfirm('기존 데이터를 모두 지우고 이 백업 파일의 내용으로 덮어씌우시겠습니까?'))) return;
 
         state.categories = data.categories;
@@ -804,7 +804,7 @@ builtins.input = _custom_input
     const resizer = $('resizer');
     const outputArea = $('output-area');
     const workPanel = $('work-panel');
-    
+
     let isResizing = false;
     let startY = 0;
     let startHeight = 0;
@@ -813,7 +813,7 @@ builtins.input = _custom_input
       isResizing = true;
       startY = e.clientY;
       startHeight = outputArea.getBoundingClientRect().height;
-      
+
       resizer.classList.add('active');
       document.body.style.cursor = 'row-resize';
       document.body.style.userSelect = 'none';
@@ -821,19 +821,19 @@ builtins.input = _custom_input
 
     document.addEventListener('mousemove', (e) => {
       if (!isResizing) return;
-      
+
       // Calculate how much the mouse moved UP
       const deltaY = startY - e.clientY;
       let newHeight = startHeight + deltaY;
-      
+
       // Min and Max constraints
       const panelRect = workPanel.getBoundingClientRect();
       const minOutputHeight = 100;
       const maxOutputHeight = panelRect.height - 150; // Keep at least 150px for editor
-      
+
       if (newHeight < minOutputHeight) newHeight = minOutputHeight;
       if (newHeight > maxOutputHeight) newHeight = maxOutputHeight;
-      
+
       outputArea.style.flex = `0 0 ${newHeight}px`;
     });
 
@@ -852,7 +852,7 @@ builtins.input = _custom_input
     const hResizer = $('h-resizer');
     const instructionPanel = $('instruction-panel');
     const appContainer = $('app-container');
-    
+
     if (!hResizer) return;
 
     let isResizing = false;
@@ -863,7 +863,7 @@ builtins.input = _custom_input
       isResizing = true;
       startX = e.clientX;
       startWidth = instructionPanel.getBoundingClientRect().width;
-      
+
       hResizer.classList.add('active');
       document.body.style.cursor = 'col-resize';
       document.body.style.userSelect = 'none';
@@ -871,20 +871,20 @@ builtins.input = _custom_input
 
     document.addEventListener('mousemove', (e) => {
       if (!isResizing) return;
-      
+
       const deltaX = e.clientX - startX;
       let newWidth = startWidth + deltaX;
-      
+
       const containerWidth = appContainer.getBoundingClientRect().width;
       const sidebarWidth = $('sidebar').getBoundingClientRect().width;
       const availableWidth = containerWidth - sidebarWidth;
-      
+
       const minWidth = 250;
       const maxWidth = availableWidth - 300; // Keep at least 300px for work panel
-      
+
       if (newWidth < minWidth) newWidth = minWidth;
       if (newWidth > maxWidth) newWidth = maxWidth;
-      
+
       instructionPanel.style.flex = `0 0 ${newWidth}px`;
     });
 
@@ -969,12 +969,12 @@ builtins.input = _custom_input
     });
 
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
-      overlay.addEventListener('click', (e) => { 
+      overlay.addEventListener('click', (e) => {
         if (e.target === overlay) {
           if (overlay.id === 'prompt-modal') closePrompt(null);
           else if (overlay.id === 'confirm-modal') closeConfirm(false);
           else hide(overlay);
-        } 
+        }
       });
     });
 
@@ -999,12 +999,12 @@ builtins.input = _custom_input
     });
 
     $('btn-preview-toggle').addEventListener('click', togglePreview);
-    
+
     $('btn-tc-prev').addEventListener('click', prevTestCase);
     $('btn-tc-next').addEventListener('click', nextTestCase);
     $('btn-add-testcase').addEventListener('click', addTestCase);
     $('btn-tc-delete').addEventListener('click', deleteTestCase);
-    
+
     $('tc-input').addEventListener('input', updateCurrentTestCaseData);
     $('tc-expected').addEventListener('input', updateCurrentTestCaseData);
 
