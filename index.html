@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PyLearn - 파이썬 학습 도구</title>
+  <title>PyLearn</title>
   <meta name="description" content="브라우저에서 파이썬 코드를 직접 작성하고 실행하며 배우는 단계별 학습 도구">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
 
   <!-- CodeMirror 5 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
@@ -28,17 +31,20 @@
   <!-- Custom -->
   <link rel="stylesheet" href="style.css?v=2">
 </head>
+
 <body>
 
   <!-- ========== HEADER ========== -->
   <header id="header">
     <div class="header-left">
-      <button id="sidebar-toggle" class="icon-btn" title="사이드바 토글">☰</button>
+      <button id="sidebar-toggle" class="icon-btn" title="학습단계 열기">☰</button>
       <div class="logo"><span class="logo-icon">🐍</span> PyLearn</div>
     </div>
     <div class="header-center">
       <div id="progress-section">
-        <div class="progress-track"><div id="progress-bar" class="progress-fill"></div></div>
+        <div class="progress-track">
+          <div id="progress-bar" class="progress-fill"></div>
+        </div>
         <span id="progress-text">0 / 0 완료</span>
       </div>
     </div>
@@ -60,7 +66,7 @@
     <!-- SIDEBAR -->
     <aside id="sidebar">
       <div class="sidebar-header">
-        <h3>📚 학습 단계</h3>
+        <h3>📚 학습 내용</h3>
       </div>
       <div id="lesson-list"></div>
       <div id="teacher-sidebar-actions" class="sidebar-actions hidden">
@@ -138,11 +144,14 @@
               <textarea id="tc-expected" placeholder="정답 출력..."></textarea>
             </div>
           </div>
-          <div id="tc-nav-bar" style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; gap:8px;">
+          <div id="tc-nav-bar"
+            style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; gap:8px;">
             <button id="btn-tc-prev" class="btn-small">◀ 이전</button>
             <span id="tc-indicator" style="font-size:12px; color:var(--text-secondary); font-weight:bold;">1 / 1</span>
             <button id="btn-tc-next" class="btn-small">다음 ▶</button>
-            <button id="btn-tc-delete" class="btn-small" style="margin-left:auto; color:var(--error); border-color:var(--error); background:rgba(248,81,73,0.1);">🗑 현재 삭제</button>
+            <button id="btn-tc-delete" class="btn-small"
+              style="margin-left:auto; color:var(--error); border-color:var(--error); background:rgba(248,81,73,0.1);">🗑
+              현재 삭제</button>
           </div>
         </div>
       </div>
@@ -248,4 +257,5 @@
 
   <script src="app.js?v=2"></script>
 </body>
+
 </html>
