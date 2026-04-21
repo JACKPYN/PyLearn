@@ -346,6 +346,8 @@ html, body {
 }
 #code-editor-container .CodeMirror {
   height: 100%; font-family: var(--font-mono); font-size: 14px;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
 }
 
 /* Buttons */
