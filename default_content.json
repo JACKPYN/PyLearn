@@ -2,168 +2,81 @@
   "categories": [
     {
       "id": "c1",
-      "title": "입출력",
+      "title": "출력",
       "lessons": [
         {
           "id": "c1_l1",
-          "title": "1. 파이썬의 첫인사",
-          "description": "## 👋 반가워요, 파이썬!\n\n`print()` 함수는 괄호 안의 내용을 화면에 보여줍니다. 문자열은 반드시 따옴표(\" 또는 ')로 감싸야 합니다.\n\n### 미션\n화면에 Hello Python을 출력해보세요.",
-          "initialCode": "# 코드를 완성하세요.\nprint()",
+          "title": "문장 출력하기",
+          "description": "### 출력 함수\n\n`print()` 함수는 괄호 안의 내용을 화면에 보여준다. 문자열은 반드시 따옴표(`\"` 또는 `'`)로 감싸야 한다.\n\n### 미션\n화면에 `Hello World`를 출력하세요.",
+          "initialCode": "print()",
           "testCases": [
             {
               "input": "",
-              "expectedOutput": "Hello Python"
+              "expectedOutput": "Hello World"
             }
           ]
         },
         {
           "id": "c1_l2",
-          "title": "2. 여러 데이터 출력하기",
-          "description": "## 콤마(,)의 마법\n\n`print()` 안에 여러 데이터를 콤마로 구분해 넣으면 한 칸 띄어쓰기 된 상태로 출력됩니다.\n\n```\nprint(\"안녕\", \"파이썬\") # 안녕 파이썬\n```\n\n\n### 미션\nPython과 is와 Easy를 콤마로 구분하여 출력하세요.",
-          "initialCode": "# 코드를 완성하세요.\nprint()",
+          "title": "줄바꿈하여 출력하기",
+          "description": "### 줄바꿈 문자\n\n`\\n` 을 이용하면 원하는 위치에서 줄바꿈을 할 수 있다.\n\n\n```\nprint(\"안녕\\n반가워\")\n```\n\n> [실행결과]<br>안녕<br>반가워\n\n<br>\n\n### 미션\nprint()를 1개만 사용하여 다음과 같이 출력하는 코드를 작성하세요.\n>파이썬<br>너무 쉽다",
+          "initialCode": "print()",
           "testCases": [
             {
               "input": "",
-              "expectedOutput": "Python is Easy"
+              "expectedOutput": "파이썬\n너무 쉽다"
             }
           ]
         },
         {
           "id": "c1_l3",
-          "title": "3. 구분자 지정하기 (sep)",
-          "description": "## 연결 고리 정하기\n\nsep 옵션을 사용하면 데이터 사이의 공백 대신 원하는 문자를 넣을 수 있습니다.\n\npython\nprint(\"010\", \"1234\", sep=\"-\") # 010-1234\n\n\n### 미션\napple, banana, cherry를 콤마로 넣고, sep=\", \"를 사용하여 apple, banana, cherry를 출력하세요.",
-          "initialCode": "print(\"apple\", \"banana\", \"cherry\", sep=\",\")",
+          "title": "변수 값 출력하기",
+          "description": "### 변수 값을 출력하는 4가지 방법\n\n1) `,` 를 이용하는 방법 : 띄어쓰기 1칸이 자동으로 들어감.\n2) `+` 를 이용하는 방법 : 문자형끼리만 연결할 수 있음. -> `str()`\n3) f-string : `print(f\"두 수의 합 : {a+b}\")`\n4. 형식지정자 : `print(\"두수의 합 : %d\"%(a+b))`\n\n<br>\n\n### 미션\n변수 food, price의 값을 다음과 같은 형태로 출력하는 코드를 완성하세요.<br>\n>15000원으로 치킨을 먹었다.\n```\nfood=\"치킨\"\nprice=15000\n\nprint()\n```\n\n",
+          "initialCode": "food=\"치킨\"\nprice=15000\nprint(\"15000원으로 치킨을 먹었다.\")",
           "testCases": [
             {
               "input": "",
-              "expectedOutput": "apple, banana, cherry"
+              "expectedOutput": "15000원으로 치킨을 먹었다."
             }
           ]
-        },
-        {
-          "id": "c1_l4",
-          "title": "4. 끝 문자 바꾸기 (end)",
-          "description": "## 줄 바꿈 방지\n\nprint()는 기본적으로 출력이 끝나면 줄을 바꿉니다. end 옵션을 빈 문자열(\"\")로 설정하면 줄을 바꾸지 않습니다.\n\n### 미션\n첫 번째 print에 end=\"\"를 사용하여 Py와 thon이 붙어서 Python으로 출력되게 하세요.",
-          "initialCode": "print(\"Py\", end=\"\")\nprint(\"thon\")",
-          "expectedOutput": "Python"
-        },
-        {
-          "id": "c1_l5",
-          "title": "5. 사용자에게 값 입력받기",
-          "description": "## input() 함수\n\ninput()을 사용하면 키보드로 입력한 값을 변수에 저장할 수 있습니다. 입력받은 값은 항상 문자열로 취급됩니다.\n\n### 미션\n입력을 받아 변수 user_input에 저장하고 그대로 출력하세요. (테스트 입력: Bear)",
-          "initialCode": "user_input = input()\nprint(user_input)",
-          "expectedOutput": "Bear"
-        },
-        {
-          "id": "c1_l6",
-          "title": "6. 입력 가이드 메시지",
-          "description": "## 친절한 입력창\n\ninput(\"메시지\") 처럼 괄호 안에 질문을 넣으면 사용자에게 안내 문구를 보여줄 수 있습니다.\n\n### 미션\nname = input(\"이름: \")을 작성하고 name을 출력하세요. (테스트 입력: Geunbae)",
-          "initialCode": "name = input(\"이름: \")\nprint(name)",
-          "expectedOutput": "Geunbae"
-        },
-        {
-          "id": "c1_l7",
-          "title": "7. 여러 줄 문자열 출력",
-          "description": "## 따옴표 세 개(\"\"\")\n\n큰따옴표 세 개를 사용하면 줄바꿈이 포함된 긴 문장을 그대로 출력할 수 있습니다.\n\n### 미션\n아래 문장을 그대로 출력하세요.\n\nLine 1\nLine 2",
-          "initialCode": "print(\"\"\"Line 1\nLine 2\"\"\")",
-          "expectedOutput": "Line 1\nLine 2"
-        },
-        {
-          "id": "c1_l8",
-          "title": "8. 이스케이프 문자 (\n)",
-          "description": "## 특수 기호 활용\n\n\\n은 줄바꿈을 의미하는 특수 기호입니다.\n\n### 미션\nHello\\nWorld를 한 번의 print로 호출하여 두 줄로 출력하세요.",
-          "initialCode": "print(\"Hello\nWorld\")",
-          "expectedOutput": "Hello\nWorld"
-        },
-        {
-          "id": "c1_l9",
-          "title": "9. f-string 기본",
-          "description": "## 세련된 출력 방식\n\n문자열 앞에 f를 붙이고 중괄호 {} 안에 변수를 넣으면 문자열과 변수를 쉽게 섞어서 출력할 수 있습니다.\n\n### 미션\n변수 city = \"Anyang\"을 사용하여 I live in Anyang을 출력하세요.",
-          "initialCode": "city = \"Anyang\"\nprint(f\"I live in {city}\")",
-          "expectedOutput": "I live in Anyang"
-        },
-        {
-          "id": "c1_l10",
-          "title": "10. 공백으로 구분하여 입력받기",
-          "description": "## .split() 함수\n\n한 번에 여러 값을 입력받아 공백으로 나누고 싶을 때 split()을 사용합니다.\n\n### 미션\n두 단어를 입력받아 공백으로 나누어 저장한 뒤, 두 번째 단어만 출력하세요. (테스트 입력: Hi Python)",
-          "initialCode": "a, b = input().split()\nprint(b)",
-          "expectedOutput": "Python"
         }
       ]
     },
     {
       "id": "c2",
-      "title": "연산자",
+      "title": "입력과 출력",
       "lessons": [
         {
           "id": "c2_l1",
-          "title": "1. 사칙연산 기초",
-          "description": "## 더하기와 빼기\n\n### 미션\n100 + 200 - 50의 결과를 출력하세요.",
-          "initialCode": "print(100 + 200 - 50)",
-          "expectedOutput": "250"
+          "title": "월과 일을 입력받아 출력하기",
+          "description": "### 입력함수\n\n`input()`은 사람으로부터 값을 입력받기 위한 변수이다. 변수 a에 값을 입력받을 때는 다음과 같이 코드를 작성한다.\n```\na=input()\n```\n`input()`은 값을 문자형으로 입력받기 때문에 입력된 값으로 계산을 하려면 숫자형(정수형, 실수형)으로 변환을 해야 한다. 변환은 다음과 같이 한다.\n```\n# 입력된 값을 정수형으로 변환\n# 정수형 : 소수점이 없는 숫자\na=int(input())\n```\n```\n# 입력된 값을 실수형으로 변환\n# 실수형 : 소수점이 있는 숫자\na=float(input())\n```\n\n<br>\n\n### [미션] 월과 일을 입력받아 출력하기\n* 조건\n  * 월과 일을 정수형으로 입력받는다. (변수명 : month, day)\n  * f-string을 이용하여 출력한다.\n  * 값을 입력받거나 출력할 때는 실행 결과와 같이 글자를 표시한다.\n\n* 실행결과 (밑줄 친 글자는 사람이 입력한 내용)\n  * 실행결과1\n    >월을 입력하시오:<u>4</u><br>\n    >일을 입력하시오:<u>7</u><br>\n    >오늘은 4월 7일입니다.\n\n\n  * 실행결과2\n    >월을 입력하시오:<u>10</u><br>\n    >일을 입력하시오:<u>25</u><br>\n    >오늘은 10월 25일입니다.\n\n\n\n",
+          "initialCode": "month=input()\nday=input()\nprint()",
+          "testCases": [
+            {
+              "input": "4\n7",
+              "expectedOutput": "오늘은 4월 7일입니다."
+            },
+            {
+              "input": "10\n25",
+              "expectedOutput": "오늘은 10월 25일입니다."
+            }
+          ]
         },
         {
           "id": "c2_l2",
-          "title": "2. 곱셈과 나눗셈",
-          "description": "## 곱하기와 나누기\n\n### 미션\n10 / 4의 결과를 출력하세요.",
-          "initialCode": "print(10 / 4)",
-          "expectedOutput": "2.5"
-        },
-        {
-          "id": "c2_l3",
-          "title": "3. 몫 연산자 (//)",
-          "description": "## 몫 구하기\n\n### 미션\n7 // 3의 결과를 출력하세요.",
-          "initialCode": "print(7 // 3)",
-          "expectedOutput": "2"
-        },
-        {
-          "id": "c2_l4",
-          "title": "4. 나머지 연산자 (%)",
-          "description": "## 나머지 구하기\n\n### 미션\n10 % 3의 결과를 출력하세요.",
-          "initialCode": "print(10 % 3)",
-          "expectedOutput": "1"
-        },
-        {
-          "id": "c2_l5",
-          "title": "5. 거듭제곱 (**)",
-          "description": "## 제곱하기\n\n### 미션\n2 ** 10의 결과를 출력하세요.",
-          "initialCode": "print(2 ** 10)",
-          "expectedOutput": "1024"
-        },
-        {
-          "id": "c2_l6",
-          "title": "6. 형 변환 (int)",
-          "description": "## 문자열을 정수로\n\n### 미션\n문자열 \"10\"과 \"20\"을 정수로 변환하여 더한 값을 출력하세요.",
-          "initialCode": "a = \"10\"\nb = \"20\"\nprint(int(a) + int(b))",
-          "expectedOutput": "30"
-        },
-        {
-          "id": "c2_l7",
-          "title": "7. 비교 연산자",
-          "description": "## 크기 비교\n\n### 미션\n10 > 5의 결과를 출력하세요.",
-          "initialCode": "print(10 > 5)",
-          "expectedOutput": "True"
-        },
-        {
-          "id": "c2_l8",
-          "title": "8. 논리 연산자 (and)",
-          "description": "## 두 조건 모두 참\n\n### 미션\n10 > 5 and 3 < 1의 결과를 출력하세요.",
-          "initialCode": "print(10 > 5 and 3 < 1)",
-          "expectedOutput": "False"
-        },
-        {
-          "id": "c2_l9",
-          "title": "9. 문자열 곱하기",
-          "description": "## 반복하기\n\n### 미션\n\"Go!\"를 3번 반복하여 출력하세요.",
-          "initialCode": "print(\"Go!\" * 3)",
-          "expectedOutput": "Go!Go!Go!"
-        },
-        {
-          "id": "c2_l10",
-          "title": "10. 복합 대입 연산자",
-          "description": "## 누적 연산\n\n### 미션\nn = 10에 += 5를 연산한 후 출력하세요.",
-          "initialCode": "n = 10\nn += 5\nprint(n)",
-          "expectedOutput": "15"
+          "title": "직사각형의 넓이 계산하기",
+          "description": "### [미션] 직사각형의 넓이 계산하기\n* 조건\n  * 직사각형의 가로 길이와 세로 길이를 실수형으로 입력받는다. (변수명 : x, y)\n  * 직사각형의 넓이를 계산하여 변수에 대입한다. (변수명 : s)\n    * `직사각형의 넓이 = 가로 길이 * 세로 길이`\n  * f-string을 이용하여 출력한다.\n  * 값을 입력받거나 출력할 때는 실행 결과와 같이 글자를 표시한다.\n\n* 실행결과 (밑줄 친 글자는 사람이 입력한 내용)\n  * 실행결과1\n    >가로 길이:<u>10</u><br>\n    >세로 길이:<u>5</u><br>\n    >직사각형의 넓이는 50.0이다.\n\n\n  * 실행결과2\n    >가로 길이:<u>3</u><br>\n    >세로 길이:<u>9</u><br>\n    >직사각형의 넓이는 13.5이다. ",
+          "initialCode": "x=\ny=\ns=\nprint()",
+          "testCases": [
+            {
+              "input": "10\n5",
+              "expectedOutput": "50.0"
+            },
+            {
+              "input": "3\n9",
+              "expectedOutput": "13.5"
+            }
+          ]
         }
       ]
     },
@@ -173,73 +86,27 @@
       "lessons": [
         {
           "id": "c3_l1",
-          "title": "1. 리스트 선언",
-          "description": "## 리스트 만들기\n\n### 미션\n[10, 20, 30] 리스트를 출력하세요.",
-          "initialCode": "my_list = [10, 20, 30]\nprint(my_list)",
-          "expectedOutput": "[10, 20, 30]"
+          "title": "리스트에서 값 선택하기",
+          "description": "### 리스트\n\n데이터를 저장하는 공간을 모아놓은 것을 말한다. 다음과 같이 리스트를 만들 수 있다.\n\n```\na=[1,2,3,4,5]\n```\n리스트의 각 값을 선택하고 싶을 때는 인덱스(index)를 이용한다. 리스트의 각 자리의 인덱스는 0번부터 시작하며, 리스트 a에서 3을 선택하고 싶으면, `a[2]` 같은 방식으로 코드를 작성하면 된다.\n```\na=[1,2,3,4,5]\nprint(a[2])\nprint(a[4])\n```\n\n> [실행결과]<br>3<br>4\n\n<br>\n\n### 미션\n리스트 x에서 10, 30, 50을 선택하여 한 줄로 출력하는 코드를 완성하세요.\n```\nx=[10,20,30,40,50]\nprint()\n\n```\n\n> [실행결과]<br>10 30 50",
+          "initialCode": "x=[10,20,30,40,50]\nprint()",
+          "testCases": [
+            {
+              "input": "",
+              "expectedOutput": "10 30 50"
+            }
+          ]
         },
         {
           "id": "c3_l2",
-          "title": "2. 리스트 인덱싱",
-          "description": "## 특정 위치 값\n\n### 미션\n[\"A\", \"B\", \"C\"]에서 첫 번째(0번) 값을 출력하세요.",
-          "initialCode": "abc = [\"A\", \"B\", \"C\"]\nprint(abc[0])",
-          "expectedOutput": "A"
-        },
-        {
-          "id": "c3_l3",
-          "title": "3. 음수 인덱스",
-          "description": "## 뒤에서부터 접근\n\n### 미션\n[1, 2, 3, 4, 5]에서 마지막 값을 출력하세요.",
-          "initialCode": "nums = [1, 2, 3, 4, 5]\nprint(nums[-1])",
-          "expectedOutput": "5"
-        },
-        {
-          "id": "c3_l4",
-          "title": "4. 리스트 슬라이싱",
-          "description": "## 범위 자르기\n\n### 미션\n[0, 1, 2, 3, 4]에서 [1, 2]만 잘라서 출력하세요.",
-          "initialCode": "data = [0, 1, 2, 3, 4]\nprint(data[1:3])",
-          "expectedOutput": "[1, 2]"
-        },
-        {
-          "id": "c3_l5",
-          "title": "5. 리스트 추가 (append)",
-          "description": "## 맨 뒤에 추가\n\n### 미션\n[\"red\"] 리스트에 \"blue\"를 추가하고 리스트를 출력하세요.",
-          "initialCode": "colors = [\"red\"]\ncolors.append(\"blue\")\nprint(colors)",
-          "expectedOutput": "['red', 'blue']"
-        },
-        {
-          "id": "c3_l6",
-          "title": "6. 중간 삽입 (insert)",
-          "description": "## 원하는 위치에 삽입\n\n### 미션\n[1, 3]의 1번 위치에 2를 넣어 출력하세요.",
-          "initialCode": "nums = [1, 3]\nnums.insert(1, 2)\nprint(nums)",
-          "expectedOutput": "[1, 2, 3]"
-        },
-        {
-          "id": "c3_l7",
-          "title": "7. 리스트 삭제 (remove)",
-          "description": "## 값으로 삭제\n\n### 미션\n[10, 20, 30]에서 20을 지우고 출력하세요.",
-          "initialCode": "nums = [10, 20, 30]\nnums.remove(20)\nprint(nums)",
-          "expectedOutput": "[10, 30]"
-        },
-        {
-          "id": "c3_l8",
-          "title": "8. 리스트 길이 (len)",
-          "description": "## 항목 개수 구하기\n\n### 미션\n[\"A\", \"B\", \"C\", \"D\"]의 길이를 출력하세요.",
-          "initialCode": "data = [\"A\", \"B\", \"C\", \"D\"]\nprint(len(data))",
-          "expectedOutput": "4"
-        },
-        {
-          "id": "c3_l9",
-          "title": "9. 리스트 정렬 (sort)",
-          "description": "## 순서대로 정렬\n\n### 미션\n[3, 1, 4, 2]를 정렬하여 출력하세요.",
-          "initialCode": "nums = [3, 1, 4, 2]\nnums.sort()\nprint(nums)",
-          "expectedOutput": "[1, 2, 3, 4]"
-        },
-        {
-          "id": "c3_l10",
-          "title": "10. 리스트 연결 (+)",
-          "description": "## 두 리스트 합치기\n\n### 미션\n[1, 2]와 [3, 4]를 더해 출력하세요.",
-          "initialCode": "print([1, 2] + [3, 4])",
-          "expectedOutput": "[1, 2, 3, 4]"
+          "title": "문자열의 부분 선택하기",
+          "description": "### 문자열 슬라이싱\n\n리스트에서 범위를 지정하여 부분을 꺼내오는 것을 슬라이싱이라고 한다. 리스트 a에서 0번 인덱스부터 2번 인덱스까지 꺼내올 때는 다음과 같이 코드를 작성한다. `a[0:3]` 은 0~2번 자리로 범위를 지정한 것이다. (3은 제외된다!)\n\n```\na=[1,2,3,4,5]\nprint(a[0:3])\n```\n> [실행결과]<br>[1, 2, 3]\n\n<br>\n\n문자열의 부분을 선택하고 싶을 때도 같은 방식으로 슬라이싱을 이용할 수 있다. 다음과 같이 문자열 `안양고등학교`에서 `안양`을 꺼내올 수 있다.\n```\ns=\"안양고등학교\"\nprint(s[0:2])\n```\n\n> [실행결과]<br>안양\n\n<br>\n\n### 미션\n문자열 x에서 `게 배`을 꺼내 출력하는 코드를 완성하세요.\n```\nx=\"파이썬을 쉽게 배우자.\"\nprint(x[ : ])\n```\n\n> [실행결과]<br>게 배",
+          "initialCode": "x=\"파이썬을 쉽게 배우자.\"\nprint(x[ : ])",
+          "testCases": [
+            {
+              "input": "",
+              "expectedOutput": "게 배"
+            }
+          ]
         }
       ]
     },
@@ -249,149 +116,67 @@
       "lessons": [
         {
           "id": "c4_l1",
-          "title": "1. 기본 if 문",
-          "description": "## 조건부 실행\n\n### 미션\nscore = 80일 때 60 이상이면 \"Pass\"를 출력하세요.",
-          "initialCode": "score = 80\nif score >= 60:\n    print(\"Pass\")",
-          "expectedOutput": "Pass"
+          "title": "합격/불합격 판단하기",
+          "description": "### if문\n\n조건이 `True`인지 `False`인지에 따라 실행되는 명령어가 달라지는 형태가 if문이다. if문은 다음과 같이 작성한다.\n```\na=100\nif a==100:\n    print(\"100이다.\")  # True일 때 실행\nelse:\n    print(\"100이 아니다.\")  # False일 때 실행\n```\n\n<br>\n\n### [미션] 합격/불합격 판단하기\n* 조건\n  * 점수를 정수형으로 입력받는다. (변수명 : score)\n  * 점수가 60점 이상이면 `합격`을, 그렇지 않으면 `불합격`을 출력한다.\n  * 값을 입력받거나 출력할 때는 실행 결과와 같이 글자를 표시한다.\n\n* 실행결과 (밑줄 친 글자는 사람이 입력한 내용)\n  * 실행결과1\n    >점수:<u>60</u><br>\n    >합격\n\n\n  * 실행결과2\n    >점수:<u>40</u><br>\n    >불합격",
+          "initialCode": "score=\nif      :\n    \nelse:\n    ",
+          "testCases": [
+            {
+              "input": "60",
+              "expectedOutput": "합격"
+            },
+            {
+              "input": "59",
+              "expectedOutput": "불합격"
+            },
+            {
+              "input": "61",
+              "expectedOutput": "합격"
+            },
+            {
+              "input": "40",
+              "expectedOutput": "불합격"
+            }
+          ]
         },
         {
           "id": "c4_l2",
-          "title": "2. if-else 문",
-          "description": "## 참과 거짓 분류\n\n### 미션\nn = -5가 0보다 크면 \"Positive\", 아니면 \"Negative\"를 출력하세요.",
-          "initialCode": "n = -5\nif n > 0:\n    print(\"Positive\")\nelse:\n    print(\"Negative\")",
-          "expectedOutput": "Negative"
+          "title": "넌센스 퀴즈",
+          "description": "### [미션] 넌센스 퀴즈\n* 조건\n  * 이름과 정답을 문자형으로 입력받는다. (변수명 : name, answer)\n  * 정답을 맞혔는지에 따라 서로 다른 결과를 출력한다.\n  * 값을 입력받거나 출력할 때는 실행 결과와 같이 글자를 표시한다.\n\n* 실행결과 (밑줄 친 글자는 사람이 입력한 내용)\n  * 실행결과1\n    >이름:<u>홍길동</u><br>\n    >세상에서 가장 빠른 닭은?:<u>타조</u><br>\n    >땡!! 홍길동님, 틀렸습니다.\n\n\n  * 실행결과2\n    >이름:<u>장길산</u><br>\n    >세상에서 가장 빠른 닭은?:<u>후다닥</u><br>\n    >딩동댕!! 장길산님, 맞혔습니다.\n",
+          "initialCode": "",
+          "testCases": [
+            {
+              "input": "홍길동\n타조",
+              "expectedOutput": "땡!! 홍길동님, 틀렸습니다."
+            },
+            {
+              "input": "장길산\n후다닥",
+              "expectedOutput": "딩동댕!! 장길산님, 맞혔습니다."
+            },
+            {
+              "input": "홍길동\n후다닥",
+              "expectedOutput": "딩동댕!! 홍길동님, 맞혔습니다."
+            },
+            {
+              "input": "장길산\n타조",
+              "expectedOutput": "땡!! 장길산님, 틀렸습니다."
+            }
+          ]
         },
         {
           "id": "c4_l3",
-          "title": "3. 짝수 홀수 판별",
-          "description": "## 나머지 연산 활용\n\n### 미션\nnum = 7이 짝수면 \"Even\", 홀수면 \"Odd\"를 출력하세요.",
-          "initialCode": "num = 7\nif num % 2 == 0:\n    print(\"Even\")\nelse:\n    print(\"Odd\")",
-          "expectedOutput": "Odd"
-        },
-        {
-          "id": "c4_l4",
-          "title": "4. elif 문",
-          "description": "## 여러 조건 검사\n\n### 미션\nscore = 85가 90이상이면 A, 80이상이면 B, 나머지는 C를 출력하세요.",
-          "initialCode": "score = 85\nif score >= 90:\n    print(\"A\")\nelif score >= 80:\n    print(\"B\")\nelse:\n    print(\"C\")",
-          "expectedOutput": "B"
-        },
-        {
-          "id": "c4_l5",
-          "title": "5. 중첩 if 문",
-          "description": "## 상세 조건 분류\n\n### 미션\nage = 25, gender = \"M\"일 때 두 조건을 모두 만족하면 \"Man\"을 출력하세요.",
-          "initialCode": "age = 25\ngender = \"M\"\nif age >= 20:\n    if gender == \"M\":\n        print(\"Man\")",
-          "expectedOutput": "Man"
-        },
-        {
-          "id": "c4_l6",
-          "title": "6. and 연산자",
-          "description": "## 논리곱\n\n### 미션\nkor = 70, eng = 80 둘 다 60 이상이면 \"Success\"를 출력하세요.",
-          "initialCode": "kor = 70\neng = 80\nif kor >= 60 and eng >= 60:\n    print(\"Success\")",
-          "expectedOutput": "Success"
-        },
-        {
-          "id": "c4_l7",
-          "title": "7. or 연산자",
-          "description": "## 논리합\n\n### 미션\nage = 70이 8세 미만 혹은 65세 이상이면 \"Free\"를 출력하세요.",
-          "initialCode": "age = 70\nif age < 8 or age >= 65:\n    print(\"Free\")",
-          "expectedOutput": "Free"
-        },
-        {
-          "id": "c4_l8",
-          "title": "8. in 연산자",
-          "description": "## 리스트 포함 검사\n\n### 미션\n\"apple\"이 fruits 리스트에 있으면 \"Yes\"를 출력하세요.",
-          "initialCode": "fruits = [\"apple\", \"banana\"]\nif \"apple\" in fruits:\n    print(\"Yes\")",
-          "expectedOutput": "Yes"
-        },
-        {
-          "id": "c4_l9",
-          "title": "9. 비밀번호 확인",
-          "description": "## 문자열 일치 비교\n\n### 미션\npw = \"1234\"가 맞으면 \"Welcome\"을 출력하세요.",
-          "initialCode": "pw = \"1234\"\nif pw == \"1234\":\n    print(\"Welcome\")",
-          "expectedOutput": "Welcome"
-        },
-        {
-          "id": "c4_l10",
-          "title": "10. not 연산자",
-          "description": "## 논리 부정\n\n### 미션\nis_rainy = False일 때 not is_rainy가 참이면 \"Go out\"을 출력하세요.",
-          "initialCode": "is_rainy = False\nif not is_rainy:\n    print(\"Go out\")",
-          "expectedOutput": "Go out"
-        }
-      ]
-    },
-    {
-      "id": "c5",
-      "title": "반복구조",
-      "lessons": [
-        {
-          "id": "c5_l1",
-          "title": "1. for 문 기초",
-          "description": "## 순차 반복\n\n### 미션\n[1, 2, 3]을 하나씩 출력하세요.",
-          "initialCode": "for i in [1, 2, 3]:\n    print(i)",
-          "expectedOutput": "1\n2\n3"
-        },
-        {
-          "id": "c5_l2",
-          "title": "2. range() 함수",
-          "description": "## 범위 생성\n\n### 미션\nrange(5)를 사용해 0부터 4까지 출력하세요.",
-          "initialCode": "for i in range(5):\n    print(i)",
-          "expectedOutput": "0\n1\n2\n3\n4"
-        },
-        {
-          "id": "c5_l3",
-          "title": "3. range 범위 지정",
-          "description": "## 시작/끝 지정\n\n### 미션\nrange(1, 6)으로 1부터 5까지 출력하세요.",
-          "initialCode": "for i in range(1, 6):\n    print(i)",
-          "expectedOutput": "1\n2\n3\n4\n5"
-        },
-        {
-          "id": "c5_l4",
-          "title": "4. 합계 누적",
-          "description": "## 1부터 10까지 더하기\n\n### 미션\n1부터 10까지의 합(55)을 출력하세요.",
-          "initialCode": "total = 0\nfor i in range(1, 11):\n    total += i\nprint(total)",
-          "expectedOutput": "55"
-        },
-        {
-          "id": "c5_l5",
-          "title": "5. while 문 기초",
-          "description": "## 조건부 반복\n\n### 미션\ni가 1부터 3까지 출력되게 하세요.",
-          "initialCode": "i = 1\nwhile i <= 3:\n    print(i)\n    i += 1",
-          "expectedOutput": "1\n2\n3"
-        },
-        {
-          "id": "c5_l6",
-          "title": "6. break 문",
-          "description": "## 반복 탈출\n\n### 미션\n1부터 10까지 반복하다가 5가 되면 멈추세요. (1~4 출력)",
-          "initialCode": "for i in range(1, 11):\n    if i == 5:\n        break\n    print(i)",
-          "expectedOutput": "1\n2\n3\n4"
-        },
-        {
-          "id": "c5_l7",
-          "title": "7. continue 문",
-          "description": "## 차례 건너뛰기\n\n### 미션\n1부터 5 중 3만 빼고 출력하세요.",
-          "initialCode": "for i in range(1, 6):\n    if i == 3:\n        continue\n    print(i)",
-          "expectedOutput": "1\n2\n4\n5"
-        },
-        {
-          "id": "c5_l8",
-          "title": "8. 문자열 순회",
-          "description": "## 글자 반복\n\n### 미션\n\"WOW\"를 한 글자씩 출력하세요.",
-          "initialCode": "for char in \"WOW\":\n    print(char)",
-          "expectedOutput": "W\nO\nW"
-        },
-        {
-          "id": "c5_l9",
-          "title": "9. 중첩 반복문",
-          "description": "## 다중 루프\n\n### 미션\n(0,0)부터 (1,1)까지 좌표를 출력하세요.",
-          "initialCode": "for i in range(2):\n    for j in range(2):\n        print(i, j)",
-          "expectedOutput": "0 0\n0 1\n1 0\n1 1"
-        },
-        {
-          "id": "c5_l10",
-          "title": "10. 구구단 출력",
-          "description": "## f-string 반복\n\n### 미션\n2단(2x1=2 ~ 2x9=18)을 출력하세요.",
-          "initialCode": "for i in range(1, 10):\n    print(f\"2 x {i} = {2 * i}\")",
-          "expectedOutput": "2 x 1 = 2\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10\n2 x 6 = 12\n2 x 7 = 14\n2 x 8 = 16\n2 x 9 = 18"
+          "title": "bmi로 체중 상태 판단하기",
+          "description": "### elif를 이용한 if문\n\n조건이 여러 개일 때는  elif를 이용하여 if문을 확장할 수 있다. elif가 포함된 if문에서 각 조건은 위에서부터 순서대로 검사된다.\n```\na=100\nif a>100:\n    print(\"100보다 크다.\")\nelif a>50:\n    print(\"50보다 크고, 100보다 작거나 같다.\")\nelif a>25:\n    print(\"25보다 크고, 50보다 작거나 같다.\")\nelse:\n    print(\"25보다 작거나 같다.\")\n```\n\n<br>\n\n### [미션] bmi 체중 상태 판단하기\n* 조건\n  * 몸무게(kg)와 키(cm)를 실수형으로 입력받는다. (변수명 : w,h)\n  * bmi를 계산하여 변수에 대입한다. (변수명 : bmi)\n    * `bmi = 몸무게(kg) / 키(m)의 제곱\n  * 계산한 bmi를 이용하여 체중 상태를 판단한다.\n    |bmi 범위|체중상태|\n    |-----|-----|\n    |18.5미만|저체중|\n    |18.5이상 23미만|정상체중|\n    |23이상 25미만|과체중|\n    |25이상|비만|\n  * 값을 입력받거나 출력할 때는 실행 결과와 같이 글자를 표시한다.\n\n* 실행결과 (밑줄 친 글자는 사람이 입력한 내용)\n  * 실행결과1\n    >몸무게(kg):<u>50</u><br>\n    >키(cm):<u>160</u><br>\n    >bmi는 19.5이고, 정상체중입니다.\n\n  * 실행결과2\n    >몸무게(kg):<u>65</u><br>\n    >키(cm):<u>165</u><br>\n    >bmi는 23.9이고, 과체중입니다.\n",
+          "initialCode": "w=\nh=\nbmi=\n\nif    :\n    \nelif    :\n    \nelif    :\n    \nelse:\n    \n    ",
+          "testCases": [
+            {
+              "input": "50\n160",
+              "expectedOutput": "bmi는 19.5이고, 정상체중입니다."
+            },
+            {
+              "input": "65\n165",
+              "expectedOutput": "bmi는 23.9이고, 과체중입니다."
+            }
+          ]
         }
       ]
     }
